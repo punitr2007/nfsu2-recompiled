@@ -187,6 +187,10 @@ jobs:
           curl -L "$ARMV7_URL" -o upstream_armv7.apk
 
           echo "Extracting upstream ARMv7 native libraries..."
+          if ! unzip -l upstream_armv7.apk | grep -q "lib/armeabi-v7a/"; then
+            echo "Warning: Upstream ARMv7 asset does not contain armeabi-v7a libraries. Skipping ARMv7 build."
+            exit 0
+          fi
           rm -rf extracted_libs android/app/src/main/jniLibs/armeabi-v7a
           unzip -o upstream_armv7.apk "lib/armeabi-v7a/*" -d extracted_libs/
           mkdir -p android/app/src/main/jniLibs/armeabi-v7a
